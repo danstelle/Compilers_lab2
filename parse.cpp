@@ -59,25 +59,28 @@ bool FindPROG()
 //******************************************
 bool FindSTMTS()
 {
+    bool valid = true;
+    
+    // If we don't find a STMT
     if (!FindSTMT())
     {
-        int token = GetToken();
+        int token = GetToken(); // Get the next token
         
+        // If the token is 'end'
         if (token == END)
+            UnGetToken();
+        else
         {
             UnGetToken();
-            return true;
+        
+            if (FindSTMTS())
+                valid = false;
         }
-        
-        UnGetToken();
-        
-        if (!FindSTMTS())
-            return true;
     }
     else if (!FindSTMTS())
-        return false;
+        valid = false;
         
-    return true;
+    return valid;
 }
 //******************************************
 bool FindSTMT()
